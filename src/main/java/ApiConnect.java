@@ -14,9 +14,18 @@ public class ApiConnect {
 
     private final String weatherApiUrl = "https://api.open-meteo.com/v1/forecast?";
 
-    public String setParams(String lat, String lon, String hourly) {
+    private String town;
+
+    private String lat;
+
+    private String lon;
+
+    public String setParams(String lat, String lon, String hourly, String town) {
+        this.lat = lat;
+        this.lon = lon;
+        this.town = town;
         return weatherApiUrl + "latitude=" + lat +
-                "&longitude=" + lon + "&daily=" + hourly;
+                "&longitude=" + lon + "&current=" + hourly;
     }
 
     public String getConnection(String uri) throws IOException {
@@ -43,24 +52,18 @@ public class ApiConnect {
     public String getResultMessage(String json) {
         JSONParser parser = new JSONParser();
         StringBuilder result = new StringBuilder();
+        result.append(town + "\n");
+        result.append("latitude: " + lat + "\n");
+        result.append("longitude: " + lon + "\n");
         try {
-            List<String> time = new ArrayList<>();
-            List<String> temperature = new ArrayList<>();
             JSONObject object = (JSONObject)parser.parse(json);
-            System.out.println(object);
-            JSONObject obj = (JSONObject)object.get("daily");
-            JSONArray array = (JSONArray) obj.get("time");
-            array.forEach(o -> {
-                time.add(o.toString());
-            });
-            JSONArray tempsArray = (JSONArray)obj.get("temperature_2m_min");
-            tempsArray.forEach(o -> {
-                temperature.add(o.toString());
-            });
-            for (int i = 0; i < time.size(); i++) {
-                result.append(time.get(i) + " " + temperature.get(i) + "\n");
-            }
-            System.out.println(result);
+            JSONObject obj = (JSONObject)object.get("current");
+            result.append("Температура: " + obj.get("temperature_2m") + " °C\n");
+            result.append("Ощущается как: " + obj.get("apparent_temperature") + " °C\n");
+            result.append("Относительная влажность: " + obj.get("relative_humidity_2m") + "%\n");
+            result.append("Облачность: " + obj.get("cloud_cover") + "%\n");
+            result.append("Осадки: " + obj.get("precipitation") + "мм\n");
+            result.append("Скрость ветра: " + obj.get("wind_speed_10m")  + "км/ч\n");
         } catch (ParseException e) {
             e.printStackTrace();
         }

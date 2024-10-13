@@ -22,7 +22,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-       return "@learn_DM_weather_bot";
+        return "@learn_DM_weather_bot";
     }
 
     @Override
@@ -39,12 +39,17 @@ public class Bot extends TelegramLongPollingBot {
         var message = update.getMessage();
         var user = message.getFrom();
         if (message.getText().contains("/")) {
-           executeCommand(message.getText(), message);
+            if (message.getText().equals("/")) {
+                sendText(id, "/ + название города на латинице - получить дневной прогноз погоды" + "\n" +
+                        "/ + history - получить историю запросов");
+                return;
+            }
+            executeCommand(message.getText(), message);
         }
         System.out.println(user.getUserName() + " wrote " + message.getText());
     }
 
-    public void sendText(Long who, String what){
+    public void sendText(Long who, String what) {
         SendMessage sm = SendMessage.builder()
                 .chatId(Long.toString(who))
                 .text(what).build();
@@ -56,38 +61,35 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String executeCommand(String command, Message message) {
-         String[] data = command.split("\\s+");
-         String mess = "";
-         if (data.length < 2) {
-             sendText(id, "Неверный запрос");
-         } else {
-             String town = data[data.length - 1].trim();
-             if (town.equals("history")) {
-                 System.out.println("squeak!");
-                 sendText(id, connection.selectHistory(message.getFrom().getUserName()));
-                 return "";
-             }
-             double[] latAndLong = null;
-             try {
-                 latAndLong = getCoordsByTownName(town);
-                 if (latAndLong == null || latAndLong.length == 0) {
-                     sendText(id, "Неверный запрос");
-                 }
-             } catch (IOException e) {
-                 sendText(id, "Неверный запрос");
-             }
-             ApiConnect connect = new ApiConnect();
-             try {
-                 mess = connect.getConnection(connect.setParams("" +
-                                 latAndLong[0], "" + latAndLong[1],
-                         "temperature_2m_min"));
-                 connection.dbTransaction(message.getFrom().getUserName() ,mess, town);
-                 sendText(id, mess);
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-         return mess;
+        String[] data = command.split("/");
+        String mess = "";
+        if (data.length < 2) {
+            sendText(id, "Неверный запрос");
+        } else {
+            String town = data[data.length - 1].trim();
+            if (town.equals("history")) {
+                sendText(id, connection.selectHistory(message.getFrom().getUserName()));
+                return "";
+            }
+            double[] latAndLong = null;
+            try {
+                latAndLong = getCoordsByTownName(town);
+                if (latAndLong == null || latAndLong.length == 0) {
+                    sendText(id, "Неверный запрос");
+                }
+                ApiConnect connect = new ApiConnect();
+                mess = connect.getConnection(connect.setParams("" +
+                                latAndLong[0], "" + latAndLong[1],
+                        "temperature_2m,relative_humidity_2m" +
+                                ",apparent_temperature,precipitation," +
+                                "cloud_cover,wind_speed_10m", town));
+                connection.dbTransaction(message.getFrom().getUserName(), mess, town);
+                sendText(id, mess);
+            } catch (IOException e) {
+                sendText(id, "Неверный запрос");
+            }
+        }
+        return mess;
     }
 
 
