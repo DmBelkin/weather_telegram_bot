@@ -62,7 +62,11 @@ public class Bot extends TelegramLongPollingBot {
              sendText(id, "Неверный запрос");
          } else {
              String town = data[data.length - 1].trim();
-             System.out.println(town);
+             if (town.equals("history")) {
+                 System.out.println("squeak!");
+                 sendText(id, connection.selectHistory(message.getFrom().getUserName()));
+                 return "";
+             }
              double[] latAndLong = null;
              try {
                  latAndLong = getCoordsByTownName(town);
