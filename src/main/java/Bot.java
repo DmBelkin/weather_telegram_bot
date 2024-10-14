@@ -50,9 +50,9 @@ public class Bot extends TelegramLongPollingBot {
             sendText(id, text);
         } else if (message.getText().equals("/weather")) {
             sendText(id, "Введите адрес места в формате / + ....");
-            sendText(id, text);
         } else if (message.getText().startsWith("/")){
             executeCommand(message.getText(), message);
+            sendText(id, text);
         } else {
             sendText(id, "Неверный запрос");
             sendText(id, text);
