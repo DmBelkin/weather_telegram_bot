@@ -9,6 +9,9 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.NativeQuery;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,10 +63,23 @@ public class DBConnection {
             b.append(entity.getResponse() + "\n\n");
         }
         session.close();
+        try {
+            writeAndSendResult(l, userName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return b.toString();
     }
 
-    public void writeAndSendResult(List<String> res, String usrName) {
-
+    public void writeAndSendResult(List<QueryEntity> res, String usrName) throws IOException {
+        File file = new File("out/history" + "_" + usrName + ".txt");
+        PrintWriter writer = new PrintWriter(file);
+        StringBuilder builder = new StringBuilder();
+        for (QueryEntity entity : res) {
+            builder.append(entity + "\n");
+        }
+        writer.write(builder.toString());
+        writer.flush();
+        writer.close();
     }
 }
