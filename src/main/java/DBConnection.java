@@ -76,7 +76,7 @@ public class DBConnection {
         PrintWriter writer = new PrintWriter(file);
         StringBuilder builder = new StringBuilder();
         for (QueryEntity entity : res) {
-            builder.append(entity + "\n");
+            builder.append(entity.toString() + "\n");
         }
         writer.write(builder.toString());
         writer.flush();
