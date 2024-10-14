@@ -16,14 +16,14 @@ public class Bot extends TelegramLongPollingBot {
 
     private final Long id = 1042994610L;
 
-    private final String geolocationApiKey = "e7c5b9ac6a6046fbae832a1aae56910d";
+    private final String geolocationApiKey = "42695c7284b1456c8a339b6911ab5a49";
 
     private DBConnection connection;
 
 
-    private final String text = "/ + название города на латинице, страна(штат, регион) - " +
+    private final String text = "/weather + название города на латинице, страна(штат, регион) - " +
             "получить дневной прогноз погоды" + "\n" +
-            "/ + history - получить историю своих запросов";
+            "/history - получить историю своих запросов";
 
 
     public Bot(DBConnection connection) {
@@ -33,12 +33,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@learn_DM_weather_bot";
+        return "@DmBLearnbot";
     }
 
     @Override
     public String getBotToken() {
-        return "7430295335:AAErnQY2xt3Py2Vlcl-ChZR0j2muOgvOu8Q";
+        return "7495334044:AAGEyk58c2LTwF6UGIH06SNYQ8erQ4GldIQ";
     }
 
     @Override
@@ -47,10 +47,15 @@ public class Bot extends TelegramLongPollingBot {
         var user = message.getFrom();
         if (message.getText().equals("/history")) {
             sendText(id, connection.selectHistory(message.getFrom().getUserName()));
-        } else if (message.getText().contains("/")) {
+            sendText(id, text);
+        } else if (message.getText().equals("/weather")) {
+            sendText(id, "Введите адрес места в формате / + ....");
+            sendText(id, text);
+        } else if (message.getText().startsWith("/")){
             executeCommand(message.getText(), message);
         } else {
             sendText(id, "Неверный запрос");
+            sendText(id, text);
         }
         System.out.println(user.getUserName() + " wrote " + message.getText());
     }

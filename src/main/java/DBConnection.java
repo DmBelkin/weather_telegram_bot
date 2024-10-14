@@ -51,7 +51,7 @@ public class DBConnection {
         Session session = sessionFactory.openSession();
         String hqlQuery = "SELECT * FROM query_history  WHERE query_history.user_name =:username";
         NativeQuery<QueryEntity> query = session.createNativeQuery(hqlQuery, QueryEntity.class);
-        query.setParameter("username", userName);
+        query.setParameter("username", userName.trim());
         List<QueryEntity> l = query.getResultList();
         b.append(userName + "\n");
         for (QueryEntity entity : l) {
