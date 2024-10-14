@@ -1,13 +1,10 @@
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ApiConnect {
@@ -20,12 +17,15 @@ public class ApiConnect {
 
     private String lon;
 
-    public String setParams(String lat, String lon, String hourly, String town) {
+    private final String queryToWeatherApi = "temperature_2m,relative_humidity_2m," +
+            "apparent_temperature,precipitation,cloud_cover,wind_speed_10m";
+
+    public String setParams(String lat, String lon, String town) {
         this.lat = lat;
         this.lon = lon;
         this.town = town;
         return weatherApiUrl + "latitude=" + lat +
-                "&longitude=" + lon + "&current=" + hourly;
+                "&longitude=" + lon + "&current=" + queryToWeatherApi;
     }
 
     public String getConnection(String uri) throws IOException {
