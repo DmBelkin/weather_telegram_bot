@@ -6,9 +6,6 @@ import lombok.Setter;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -21,9 +18,9 @@ import java.util.List;
 @Setter
 public class Bot extends TelegramLongPollingBot {
 
-    private final Long id = 1042994610L;
+    private final Long id = 0L;
 
-    private final String geolocationApiKey = "e7c5b9ac6a6046fbae832a1aae56910d";
+    private final String geolocationApiKey = "";
 
     private DBConnection connection;
 
@@ -46,12 +43,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@learn_DM_weather_bot";
+        return "";
     }
 
     @Override
     public String getBotToken() {
-        return "7430295335:AAErnQY2xt3Py2Vlcl-ChZR0j2muOgvOu8Q";
+        return "";
     }
 
     @Override
