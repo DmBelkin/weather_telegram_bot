@@ -16,7 +16,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private final Long id = 1042994610L;
 
-    private final String geolocationApiKey = "42695c7284b1456c8a339b6911ab5a49";
+    private final String geolocationApiKey = "9c911e222fc346ffbda38f12ab245179";
 
     private DBConnection connection;
 
