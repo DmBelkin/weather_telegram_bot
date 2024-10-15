@@ -25,6 +25,8 @@ public class DBConnection {
 
     private SessionFactory sessionFactory;
 
+    private File history;
+
     public DBConnection() {
         registry = new StandardServiceRegistryBuilder().
                 configure("hibernate.cfg.xml").build();
@@ -64,14 +66,14 @@ public class DBConnection {
         }
         session.close();
         try {
-            writeAndSendResult(l, userName);
+            writeResult(l, userName);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return b.toString();
     }
 
-    public void writeAndSendResult(List<QueryEntity> res, String usrName) throws IOException {
+    public void writeResult(List<QueryEntity> res, String usrName) throws IOException {
         File file = new File("out/history" + "_" + usrName + ".txt");
         PrintWriter writer = new PrintWriter(file);
         StringBuilder builder = new StringBuilder();
@@ -81,5 +83,6 @@ public class DBConnection {
         writer.write(builder.toString());
         writer.flush();
         writer.close();
+        this.history = file;
     }
 }

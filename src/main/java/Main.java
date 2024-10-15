@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final Long id = 1042994610L;
+    private static final Long id = 0L;
 
     public static void main(String[] args) throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
